@@ -1,0 +1,16 @@
+{
+  "name": "lab02",
+  "version": "1.0.0",
+  "description": "Lab 02 - Exercice",
+  "main": "calculator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Vinicius",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0"
+  }
+}
