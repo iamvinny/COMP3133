@@ -3,7 +3,7 @@ User Input Validation Rest API connected to MongoDB
 
 <!-- Screenshot -->
 ## Empty Content Validation
-![Screenshot_01](/lab4_users_database/screenshots/empty_content.png = 250x250)
+![Screenshot_01|500](/lab4_users_database/screenshots/empty_content.png)
 
 ## Email Validation
 ![Screenshot_02](/lab4_users_database/screenshots/email_validation.png)
