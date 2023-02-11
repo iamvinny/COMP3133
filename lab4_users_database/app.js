@@ -26,72 +26,58 @@ mongoose.connect(MONGODB, {useNewUrlParser: true})
 
 // Define a simple route
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send(`<h1>COMP3133 - Lab Exercise 04</h1>
+  <h3>The following routes are available:</h3>
+  <ul>
+    <li>POST /users</li>
+  </ul>
+  <span>Example of a valid JSON object to be sent to the POST /users route:</span>
+  <pre>
+    <code>
+    {
+        "name": "Leanne Graham",
+        "username": "Bret",
+        "email": "leanne.graham@gmail.com",
+        "address": {
+          "street": "Kulas Light",
+          "suite": "Apt. 556",
+          "city": "Gwenborough",
+          "zipcode": "92998-3874",
+          "geo": {
+            "lat": "-37.3159",
+            "lng": "81.1496"
+          }
+        },
+        "phone": "1-770-736-8031",
+        "website": "http://hildegard.org",
+        "company": {
+          "name": "Romaguera-Crona",
+          "catchPhrase": "Multi-layered client-server neural-net",
+          "bs": "harness real-time e-markets"
+        }
+    }
+    </code>
+  </pre>
+  `);
 });
 
 // Create a new user with POST Rest API
-app.post('/users', (req, res) => {
-    // Validate to check if all fields are filled
-    if(!req.body.username || !req.body.email || !req.body.city || !req.body.web || !req.body.zip || !req.body.phone) {
-        return res.status(400).send({
-            message: "User content can not be empty"
-        });
-    }
-
-    // Validate if username is >= 4 lenght
-    if(req.body.username.length < 4) {
-        return res.status(400).send({
-            message: "Username must be at least 4 characters"
-        });
-    }
-
-    // Validate if email is valid
-    if(!req.body.email.includes("@")) { // we can check if @ is in the email
-        return res.status(400).send({
-            message: "Email is not valid"
-        });
-    }
-
-    // Allow only alphabets and space while entering city name
-    if(!/^[a-zA-Z ]+$/.test(req.body.city)) {
-        return res.status(400).send({
-            message: "City name can only contain letters and space"
-        });
-    }
-
-    // Allow only valid web URL address (http or https is valid)
-    if(!req.body.web.includes("http")) {
-        return res.status(400).send({
-            message: "Web URL is not valid"
-        });
-    }
-
-    // Zip code format must be like 12345-1234 (DDDDD-DDDD, D = digit)
-    if(!/^\d{5}-\d{4}$/.test(req.body.zip)) {
-        return res.status(400).send({
-            message: "Zip code is not valid"
-        });
-    }
-
-    // Validate phone format like 1-123-123-1234 (D-DDD-DDD-DDD, D = digit)
-    if(!/^\d-\d{3}-\d{3}-\d{4}$/.test(req.body.phone)) {
-        return res.status(400).send({
-            message: "Phone number is not valid"
-        });
-    }
-
-    // Create user object
-    const newUser = new User({
-      username: req.body.username,
-      email: req.body.email,
-      city: req.body.city,
-      web: req.body.web,
-      zip: req.body.zip,
-      phone: req.body.phone
-    });
+app.post('/users', async (req, res) => {
+    console.log(req.body);
+    
+    const user = new User(req.body)
 
     // Save user object to MongoDB
-    newUser.save()
-      .then(user => res.json(user))
-      .catch(err => console.log(err));
+    try {
+        await user.save((err) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(user);
+        }
+        });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+
 });
